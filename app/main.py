@@ -9,15 +9,14 @@ class Person:
 
 def create_person_list(people_dicts: list) -> list:
     Person.people = {}
-    for p_dict in people_dicts:
-        Person(p_dict["name"], p_dict["age"])
+    [Person(p["name"], p["age"]) for p in people_dicts]
 
     for p_dict in people_dicts:
-        name = p_dict["name"]
-        person_instance = Person.people[name]
-        partner_key = "wife" if "wife" in p_dict else "husband"
-        partner_name = p_dict.get(partner_key)
-        if partner_name is not None:
-            partner_instance = Person.people[partner_name]
-            setattr(person_instance, partner_key, partner_instance)
+        person_instance = Person.people[p_dict["name"]]
+        wife_name = p_dict.get("wife")
+        husband_name = p_dict.get("husband")
+        if wife_name is not None:
+            person_instance.wife = Person.people[wife_name]
+        if husband_name is not None:
+            person_instance.husband = Person.people[husband_name]
     return list(Person.people.values())
